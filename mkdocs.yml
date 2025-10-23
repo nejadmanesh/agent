@@ -1,0 +1,14 @@
+site_name: Agent Project Documentation
+site_description: Reference documentation for the Agent project scaffold.
+site_author: Your Name
+repo_url: https://github.com/example/agent-project
+nav:
+  - Home: index.md
+theme:
+  name: material
+  language: en
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
