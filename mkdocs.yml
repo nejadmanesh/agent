@@ -3,10 +3,20 @@ site_description: Reference documentation for the Agent project scaffold.
 site_author: Your Name
 repo_url: https://github.com/example/agent-project
 nav:
-  - Home: index.md
+  - خانه: index.md
+  - راهنماها:
+      - راهنمای فنی: technical-guide.md
+      - راهنمای کاربری: user-guide.md
+  - کسب‌وکار:
+      - پلن‌های قیمتی: business/pricing-plans.md
+      - بسته بازاریابی: business/marketing-assets.md
+  - حقوقی و پشتیبانی:
+      - الگوی قرارداد: legal/contract-template.md
+      - الگوی SLA: legal/sla-template.md
+      - فرآیند پشتیبانی: legal/support-process.md
 theme:
   name: material
-  language: en
+  language: fa
 markdown_extensions:
   - admonition
   - codehilite
