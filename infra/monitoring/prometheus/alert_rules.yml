@@ -1,0 +1,27 @@
+groups:
+  - name: infrastructure-alerts
+    rules:
+      - alert: CadvisorDown
+        expr: up{job="cadvisor"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: cAdvisor target is down
+          description: Prometheus has not been able to scrape the cAdvisor endpoint for more than 2 minutes.
+      - alert: HighContainerCPUUsage
+        expr: avg by (container_label_com_docker_compose_service) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service!="", image!=""}[5m]) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High CPU usage detected for {{ $labels.container_label_com_docker_compose_service }}
+          description: Container {{ $labels.container_label_com_docker_compose_service }} has used more than 80% CPU for the last 5 minutes.
+      - alert: ApplicationLoopStalls
+        expr: increase(app_loop_iterations_total[5m]) == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Application loop has stalled
+          description: The application loop metric has not increased in the last 5 minutes, indicating that the worker may be stuck.
