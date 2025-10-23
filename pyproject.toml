@@ -6,6 +6,8 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 packages = [
     { include = "app", from = "src" },
+    { include = "services", from = "src" },
+    { include = "workers", from = "src" },
     { include = "data_pipeline", from = "src" },
 ]
 
@@ -16,6 +18,14 @@ pandas = "^2.1"
 sqlalchemy = "^2.0"
 psycopg2-binary = "^2.9"
 pyarrow = "^13.0"
+fastapi = "^0.103"
+uvicorn = { extras = ["standard"], version = "^0.23" }
+pydantic = "^2.3"
+python-multipart = "^0.0.6"
+celery = "^5.3"
+redis = "^5.0"
+joblib = "^1.3"
+scikit-learn = "^1.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9"
@@ -38,7 +48,7 @@ include = '\\.(py|pyi)$'
 [tool.isort]
 profile = "black"
 line_length = 88
-known_first_party = ["app"]
+known_first_party = ["app", "data_pipeline", "services", "workers"]
 
 [tool.mypy]
 python_version = "3.11"
