@@ -1,33 +1,41 @@
-# Agent Project
+# مستندات پروژه Agent
 
-Welcome to the Agent project documentation. This site is generated with MkDocs and
-provides guidance on how to work with the project scaffold.
+به مجموعه مستندات پروژه خوش آمدید. این سایت با استفاده از MkDocs ساخته شده و راهنمایی‌های فنی، کاربری و تجاری را در اختیار تیم‌های مختلف قرار می‌دهد.
 
-## Getting Started
+## شروع سریع
 
-1. Install Poetry if it is not already installed.
-2. Install the project dependencies:
-
+1. Poetry را نصب کنید و وابستگی‌ها را با دستور زیر دریافت کنید:
    ```bash
    poetry install
    ```
-
-3. Set up the pre-commit hooks:
-
+2. قلاب‌های pre-commit را فعال کنید:
    ```bash
    poetry run pre-commit install
    ```
+3. برای اجرای تست‌ها از دستور زیر بهره ببرید:
+   ```bash
+   poetry run pytest
+   ```
+4. برای مشاهده مستندات به‌صورت محلی:
+   ```bash
+   poetry run mkdocs serve
+   ```
 
-4. Copy `.env.example` to `.env` and adjust the configuration values as needed.
+## ساختار مستندات
 
-## Development Tools
+- **راهنماهای فنی و کاربری:** توضیحات معماری، فرایند توسعه و نحوه استفاده کاربران نهایی.
+- **اسناد کسب‌وکار:** پلن‌های قیمتی و محتوای آماده برای ارائه‌های بازاریابی.
+- **الگوهای حقوقی و پشتیبانی:** قراردادها، توافق‌نامه سطح خدمات و فرآیند مدیریت تیکت‌ها.
 
-- **Black** automatically formats the source code.
-- **isort** sorts the imports.
-- **mypy** performs static type checking.
-- **pre-commit** executes the configured checks before each commit.
-- **MkDocs** builds the project documentation. Serve the docs locally with:
+## منابع ابزار توسعه
 
-  ```bash
-  poetry run mkdocs serve
-  ```
+- **Black** برای فرمت خودکار کدها.
+- **isort** جهت مرتب‌سازی ایمپورت‌ها.
+- **mypy** برای بررسی تایپ.
+- **pytest** برای اجرای تست‌ها.
+
+## ارتباط با تیم
+
+- برای سوالات فنی با کانال توسعه‌دهندگان در تماس باشید.
+- درخواست‌های بازاریابی را با تیم مارکتینگ هماهنگ کنید.
+- موضوعات حقوقی و SLA را با بخش حقوقی مرور نمایید.
