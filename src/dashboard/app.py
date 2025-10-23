@@ -77,7 +77,11 @@ def _render_login_form(api_client: DashboardAPI, config: DashboardConfig) -> Non
 
     st.session_state.auth_token = auth_result.access_token
     st.session_state.auth_payload = auth_result.raw_payload
-    st.session_state.auth_claims = _decode_jwt(auth_result.access_token, config.jwt_secret)
+    st.session_state.auth_claims = _decode_jwt(
+        auth_result.access_token,
+        config.jwt_secret,
+        config.jwt_algorithms,
+    )
     st.success("ورود با موفقیت انجام شد.")
     st.experimental_rerun()
 
@@ -184,34 +188,34 @@ def _discover_label_field(sample: Mapping[str, Any]) -> str | None:
     return None
 
 
-def _decode_jwt(token: str, secret: str | None) -> Mapping[str, Any] | None:
+def _decode_jwt(
+    token: str,
+    secret: str | None,
+    allowed_algorithms: Sequence[str] | None,
+) -> Mapping[str, Any] | None:
     if not token:
         return None
 
-    algorithm = "HS256"
-    try:
-        header = jwt.get_unverified_header(token)
-        if isinstance(header, Mapping):
-            alg_value = header.get("alg")
-            if isinstance(alg_value, str) and alg_value:
-                algorithm = alg_value
-    except (PyJWTError, ValueError, TypeError):
-        pass
+    algorithms: tuple[str, ...] = tuple(
+        alg for alg in (allowed_algorithms or ("HS256",)) if isinstance(alg, str) and alg
+    ) or ("HS256",)
 
+    options = {"verify_aud": False}
     try:
         if secret:
             return jwt.decode(
                 token,
                 secret,
-                algorithms=[algorithm],
-                options={"verify_aud": False},
+                algorithms=list(algorithms),
+                options=options,
             )
+        options["verify_signature"] = False
         return jwt.decode(
             token,
-            options={"verify_signature": False, "verify_aud": False},
-            algorithms=[algorithm],
+            options=options,
+            algorithms=list(algorithms),
         )
-    except InvalidTokenError:
+    except (InvalidTokenError, PyJWTError, ValueError, TypeError):
         return None
 
 
