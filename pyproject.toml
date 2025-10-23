@@ -4,10 +4,19 @@ version = "0.1.0"
 description = "Base Python project scaffold configured with modern development tooling."
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-packages = [{ include = "app", from = "src" }]
+packages = [
+    { include = "app", from = "src" },
+    { include = "api", from = "src" },
+    { include = "inference", from = "src" },
+    { include = "worker", from = "src" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+fastapi = "^0.103.0"
+uvicorn = "^0.23.0"
+celery = "^5.3.0"
+pydantic = "^1.10.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9"
@@ -24,12 +33,12 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 88
 target-version = ["py311"]
-include = "\.(py|pyi)$"
+include = "\\.(py|pyi)$"
 
 [tool.isort]
 profile = "black"
 line_length = 88
-known_first_party = ["app"]
+known_first_party = ["app", "api", "inference", "worker"]
 
 [tool.mypy]
 python_version = "3.11"
