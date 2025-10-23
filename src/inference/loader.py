@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Dict
+from typing import Any, Dict, cast
 
 from .config import ModelConfig
 from .memory import MemoryManager, MemoryReservation
@@ -77,7 +77,7 @@ class ModelLoader:
             return dict(config.metadata)
         if path.suffix.lower() in {".json", ""}:
             try:
-                return json.loads(path.read_text(encoding="utf-8"))
+                return cast(Dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
             except json.JSONDecodeError as exc:  # pragma: no cover - defensive
                 raise ValueError(f"Invalid JSON model artifact at {path}") from exc
         if path.suffix.lower() in {".txt", ".md"}:

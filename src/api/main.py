@@ -5,10 +5,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status  # type: ignore[import-not-found]
 
-from inference import MemoryStatus
+from inference import InferenceEngine, MemoryManager, MemoryStatus
 
+from .database import Database
 from .dependencies import get_database, get_engine, get_memory_manager
 from .schemas import (
     InferenceRequest,
@@ -35,8 +36,8 @@ def create_app() -> FastAPI:
     )
     def enqueue_inference(
         request: InferenceRequest,
-        engine=Depends(get_engine),
-        database=Depends(get_database),
+        engine: InferenceEngine = Depends(get_engine),
+        database: Database = Depends(get_database),
     ) -> InferenceResponse:
         from worker.tasks import run_inference_task
 
@@ -56,7 +57,7 @@ def create_app() -> FastAPI:
     )
     def synchronous_inference(
         request: InferenceRequest,
-        engine=Depends(get_engine),
+        engine: InferenceEngine = Depends(get_engine),
     ) -> SynchronousInferenceResponse:
         result = engine.predict(request.input_text, model_name=request.model_name)
         return SynchronousInferenceResponse(
@@ -70,7 +71,10 @@ def create_app() -> FastAPI:
         "/inference/tasks/{task_id}",
         response_model=InferenceResultResponse,
     )
-    def get_inference_result(task_id: str, database=Depends(get_database)) -> InferenceResultResponse:
+    def get_inference_result(
+        task_id: str,
+        database: Database = Depends(get_database),
+    ) -> InferenceResultResponse:
         record = database.get_result(task_id)
         if record is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Task not found")
@@ -85,7 +89,9 @@ def create_app() -> FastAPI:
         )
 
     @app.get("/memory")
-    def memory_status(memory_manager=Depends(get_memory_manager)) -> Dict[str, Any]:
+    def memory_status(
+        memory_manager: MemoryManager = Depends(get_memory_manager),
+    ) -> Dict[str, Any]:
         status_obj: MemoryStatus = memory_manager.status()
         return {
             "limit_bytes": status_obj.limit_bytes,
@@ -95,7 +101,7 @@ def create_app() -> FastAPI:
         }
 
     @app.get("/models")
-    def list_models(engine=Depends(get_engine)) -> Dict[str, Any]:
+    def list_models(engine: InferenceEngine = Depends(get_engine)) -> Dict[str, Any]:
         return {
             "default_model": engine.default_model_name,
             "available_models": list(engine.list_models().keys()),

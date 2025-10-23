@@ -6,7 +6,7 @@ import os
 from typing import Any, Dict
 from uuid import uuid4
 
-from celery import Celery
+from celery import Celery  # type: ignore[import-not-found]
 
 from api.dependencies import get_database, get_engine
 
@@ -24,7 +24,9 @@ celery_app.conf.update(
 
 
 @celery_app.task(name="worker.run_inference_task", bind=True)
-def run_inference_task(self, input_text: str, model_name: str | None = None) -> Dict[str, Any]:
+def run_inference_task(
+    self: Any, input_text: str, model_name: str | None = None
+) -> Dict[str, Any]:
     engine = get_engine()
     database = get_database()
     task_id = self.request.id or str(uuid4())
