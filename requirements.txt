@@ -1,0 +1,2 @@
+# This file is managed via Poetry. Regenerate with:
+#   poetry export --without-hashes --format=requirements.txt --output=requirements.txt

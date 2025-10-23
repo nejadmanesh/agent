@@ -1,0 +1,2 @@
+# Development dependencies exported via Poetry. Regenerate with:
+#   poetry export --with dev --without-hashes --format=requirements.txt --output=requirements-dev.txt
